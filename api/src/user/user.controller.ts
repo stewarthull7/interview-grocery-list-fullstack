@@ -1,6 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common'
 
 import { Serialize } from 'src/interceptors/serialize.interceptor'
+import { AuthToken } from 'src/decorators/auth-token.decorator'
 
 import { UserService } from './user.service'
 import { FilterUserDto, UserDto } from './dto/user.dto'
@@ -16,6 +17,14 @@ export class UserController {
   @Serialize(UserDto)
   async getUsers(@Query() filter: FilterUserDto) {
     const data = await this.userService.getUsers(filter)
+
+    return { data }
+  }
+
+  @Get('me')
+  @Serialize(UserDto)
+  async getMe(@AuthToken() jwt: string) {
+    const data = await this.userService.getMe(jwt)
 
     return { data }
   }
