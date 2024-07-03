@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, IconButton } from '@mui/material'
 import { Add, Edit, Save } from '@mui/icons-material'
 
@@ -7,6 +7,16 @@ import GroceryList from '@components/GroceryList'
 import GroceryForm from '@components/GroceryForm'
 
 export const Route = createFileRoute('/_default/')({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated()) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
   component: Index, 
 })
 
