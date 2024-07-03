@@ -10,9 +10,9 @@ export class UserService {
     private readonly prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
-  
+
   async getMe(jwt: string) {
-    const decoded = this.jwtService.decode(jwt) as any;
+    const decoded = this.jwtService.decode(jwt) as any
 
     const user = await this.prisma.user.findFirst({
       where: {
@@ -20,9 +20,9 @@ export class UserService {
       },
     })
 
-    return user;
+    return user
   }
-  
+
   async findOne(params: FindUserDto) {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -31,7 +31,7 @@ export class UserService {
       },
     })
 
-    return user;
+    return user
   }
 
   async getUsers(filter: FilterUserDto) {
@@ -48,15 +48,15 @@ export class UserService {
     try {
       const user = await this.prisma.user.create({
         data: createUserDto,
-      });
-      return user;
+      })
+      return user
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ConflictException('Email already exists.');
+          throw new ConflictException('Email already exists.')
         }
       }
-      throw error;
+      throw error
     }
   }
 }
