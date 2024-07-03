@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core'
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common'
+import { BadRequestException, Logger, ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { ConfigService } from '@nestjs/config'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { NextFunction, Request, Response } from 'express'
 
 import { AppModule } from './app.module'
@@ -15,7 +15,19 @@ async function bootstrap() {
     logger: process.env.NODE_ENV === 'development' ? ['debug', 'error', 'log', 'verbose', 'warn'] : ['error', 'warn'],
   })
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      exceptionFactory: errors => {
+        const formattedErrors = errors.map(error => ({
+          pointer: error.property,
+          messages: Object.values(error.constraints),
+        }))
+        return new BadRequestException(formattedErrors)
+      },
+    }),
+  )
   app.enableVersioning({
     type: VersioningType.URI,
   })
@@ -41,9 +53,9 @@ async function bootstrap() {
     .setTitle('Interview Grocery List Fullstack API')
     .setDescription('Interview Grocery List Fullstack API')
     .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+    .build()
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api', app, document)
 
   await app.listen(apiPort, '0.0.0.0')
 
