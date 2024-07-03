@@ -20,8 +20,10 @@ enum GroceryItemStatus {
 
 model User {
   id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email    String @unique
+  email    String @unique @db.VarChar(254)
   password String?
+  firstName String? @db.VarChar(50)
+  lastName String? @db.VarChar(50)
 
   createdAt DateTime  @default(now()) @db.Timestamptz()
   updatedAt DateTime  @updatedAt @db.Timestamptz()
