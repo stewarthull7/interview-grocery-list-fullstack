@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { ConfigService } from '@nestjs/config'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NextFunction, Request, Response } from 'express'
 
 import { AppModule } from './app.module'
@@ -35,6 +36,14 @@ async function bootstrap() {
     // allows the frontend to access the Authorization and Authorization-Refresh headers
     exposedHeaders: ['Authorization', 'Authorization-Refresh'],
   })
+
+  const config = new DocumentBuilder()
+    .setTitle('Interview Grocery List Fullstack API')
+    .setDescription('Interview Grocery List Fullstack API')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(apiPort, '0.0.0.0')
 
