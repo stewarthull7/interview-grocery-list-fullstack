@@ -32,6 +32,11 @@ interface RegisterFormRequest {
 
 interface RegisterFormResponse extends LoginFormResponse {}
 
+interface ValidationError<Pointer> {
+  pointer: Pointer,
+  messages: string[],
+}
+
 interface User {
   id: string
   email: string
