@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { CreateUserDto, FilterUserDto, FindUserDto } from './dto/user.dto'
@@ -19,6 +19,10 @@ export class UserService {
         id: decoded.sub,
       },
     })
+
+    if (!user) {
+      throw new UnauthorizedException()
+    }
 
     return user
   }
