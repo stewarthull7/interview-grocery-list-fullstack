@@ -25,6 +25,8 @@ services:
     command: /bin/sh -c "while sleep 1000; do :; done"
     depends_on:
       - db
+    volumes:
+      - .:/workspaces
     ports:
       - 5173:5173
       - 5000:5000

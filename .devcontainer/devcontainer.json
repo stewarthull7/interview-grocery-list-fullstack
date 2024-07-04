@@ -4,7 +4,7 @@
 	"name": "Node.js & TypeScript",
 	"dockerComposeFile": ["../docker-compose.yml"],
 	"service": "workspace",
-	"workspaceFolder": "/workspaces/interview-grocery-list-fullstack",
+	"workspaceFolder": "/workspaces",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
